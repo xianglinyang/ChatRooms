@@ -1,0 +1,71 @@
+1.具体功能
+    1.1 rec()
+    ->server
+    server
+#01        1.1.1 /openchannel channelName
+        开通新的聊天室。
+#02        1.1.2 /channels
+        列出服务方所有开通的聊天室。
+#03        1.1.3 /enterchannel channelName
+        进入到某个聊天室channel中。这时可以用list，kickout userid命令。直到使用leave命令离开该聊天室。
+#04        1.1.4 /list
+        列出用户当前所在聊天室的所有用户列表。
+#05        1.1.5 /kickout userid
+        将当前所在聊天室的某个活跃用户踢出该聊天室，并且向该聊天室中的所有活跃用户发送将某个用户踢出该聊天室的消息。
+#06        1.1.6 /leave
+        离开聊天室。
+#07        1.1.7 /closechannel channelname
+        关闭某个的聊天室，并且向该聊天室中的所有活跃用户发送关闭该聊天室的消息
+        自己不能在该聊天室内
+#08        1.1.8 /message
+        在当前聊天室发送消息
+    client
+#09        1.1.9 /channels
+        列出服务方当前活跃的聊天室。
+#10        1.1.10 /join channel username
+        以username为名加入到聊天室channel中，服务方给该用户分配一个唯一标识，以后的聊天应该包含该ID。
+#11        1.1.11 /list
+        列出用户当前所在聊天室的所有用户列表。
+#12        1.1.12 /msg userid your_message_here
+        给用户发送私人聊天的信息（其他用户不会收到）。
+#13        1.1.13 /leave
+        离开聊天室。
+#08        1.1.14 /message
+        在当前聊天室发送消息
+    ->client
+#15        1.1.15 /message
+        得到服务器发来的消息
+#16        1.1.16 /leave room
+#17        1.1.17 /join room
+        得到userID
+
+
+
+2. 应用层协议,数据结构
+protocol
+[userName userId:command:channelName:parameters]
+rooms[[roomName,user,user],[roomName,user,user]]
+user[userName,userId,addr]
+
+log:
+4.10
+debug code from ppt
+download pycharm
+learn to use socket
+
+4.11
+learn to use pycharm
+learn syntax of python
+debug and run code from ppt
+get the meaning of design protocol
+start to implement some features
+start some logs
+
+4.12
+design a simple protocol
+implement more features
+
+4.13
+amend protocol
+debug
+implement more features
