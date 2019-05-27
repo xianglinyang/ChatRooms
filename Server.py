@@ -28,6 +28,11 @@ Root['width'] = 450
 ListBox = tkinter.Listbox(Root, width=300)
 ListBox.place(x=5, y=0, width=440, height=280)
 
+# 滚动条
+scrollbar = tkinter.Scrollbar(ListBox, command=ListBox.yview)
+scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+ListBox.config(yscrollcommand=scrollbar.set)
+
 # 创建输入文本框和关联变量
 msg = tkinter.StringVar()
 msg.set('')
@@ -122,7 +127,7 @@ def rec():
                     s.sendto(m.encode(), Rooms[i][j][2])
                 del(Rooms[i])
                 break
-        ListBox.insert(tkinter.END,"You closed room: "+channel_name)
+        ListBox.insert(tkinter.END, "You closed room: "+channel_name)
 
 # server 处理转发message
     def server_message(user, channel, sender_data):
@@ -149,7 +154,7 @@ def rec():
         else:
             m = "server 0:15:0:Rooms: "
             for i in range(len(Rooms)):
-                m = m + Rooms[i][0] + '/'
+                m = m + Rooms[i][0] + ' '
         s.sendto(m.encode(), recv_data)
 
     def client_join(addr, parameters):
@@ -170,7 +175,7 @@ def rec():
         for i in range(len(Rooms)):
             if Rooms[i][0] == channel_name:
                 for j in range(1, len(Rooms[i])):
-                    m = m + Rooms[i][j][1] + "/"
+                    m = m + Rooms[i][j][1] + " "
                 break
         s.sendto(m.encode(), addr)
 
@@ -185,7 +190,7 @@ def rec():
                         recv_addr = Rooms[i][j][2]
                         break
                 break
-        message = sender_info + ':15:' + channel_name + ":(private) " + m
+        message = sender_info + ':18:' + channel_name + ":(private) " + m
         s.sendto(message.encode(), recv_addr)
 
     def client_leave(addr, user, channel_name):

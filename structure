@@ -38,6 +38,8 @@
 #16        1.1.16 /leave room
 #17        1.1.17 /join room
         得到userID
+#18        1.1.18 /message
+        得到其他用户发来的消息
 
 
 

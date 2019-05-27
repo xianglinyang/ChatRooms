@@ -69,6 +69,12 @@ root['width'] = 520
 listbox = tkinter.Listbox(root, width=300)
 listbox.place(x=5, y=0, width=440, height=280)
 
+# 滚动条
+scrollbar = tkinter.Scrollbar(listbox, command=listbox.yview)
+scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+listbox.config(yscrollcommand=scrollbar.set)
+
+
 # 创建输入文本框和关联变量
 msg = tkinter.StringVar()
 msg.set('')
@@ -80,10 +86,10 @@ def send(event=0):
     global Channel, UserName, UserId
     m = entry.get()
     # 应用层协议格式
-    # parameter_number
+    # user info
     # command type
     # sender_channel
-    # parameters
+    # parameters(if any)
     # msg(if any)
     mes = m.split(' ', 1)
     if mes[0] == '/channels':
@@ -92,11 +98,12 @@ def send(event=0):
         if UserId == '0':
             message = UserName + ' ' + UserId + ':10:' + Channel + ':' + mes[1]
         else:
-            listbox.insert(tkinter.END, "You have to leave this room then you can join another room.")
+            listbox.insert(tkinter.END, "You have to leave this room before you join another room.")
     elif mes[0] == '/list':
         message = UserName + ' ' + UserId + ':11:' + Channel
     elif mes[0] == '/msg':
         message = UserName + ' ' + UserId + ':12:' + Channel + ':' + mes[1]
+        listbox.itemconfig(tkinter.END, fg='blue')
         listbox.insert(tkinter.END, "(private) To "+mes[1])
     elif mes[0] == '/leave':
         message = UserName + ' ' + UserId + ':13:' + Channel
@@ -116,6 +123,15 @@ def rec():
         # user_id == 0 表示服务器发送的
         m = 'From ' + user_id + ' :' + recv_data
         listbox.insert(tkinter.END, m)
+        listbox.insert(tkinter.END, " ")
+
+    def clientmsg_recv(user, recv_data):
+        user_info = user.split(' ', 1)
+        user_id = user_info[1]
+        # user_id == 0 表示服务器发送的
+        m = 'From ' + user_id + ' :' + recv_data
+        listbox.insert(tkinter.END, m)
+        listbox.itemconfig(tkinter.END, fg='blue')
         listbox.insert(tkinter.END, " ")
 
     def client_join(user):
@@ -146,6 +162,8 @@ def rec():
             client_leave(recv_mes[3])
         elif recv_mes[1] == '17':
             client_join(recv_mes[3])
+        elif recv_mes[1] == '18':
+            clientmsg_recv(recv_mes[0], recv_mes[3])
 
 
 t = threading.Thread(target=rec)
@@ -176,7 +194,7 @@ list_button = tkinter.Button(root, text='List', command=list_butt)
 list_button.place(x=450, y=40, width=60, height=30)
 
 
-#/list
+#/leave
 def leave_butt():
     message = UserName + ' ' + UserId + ':13:' + Channel
     s.sendto(message.encode(), ServerAddr)
